@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDE Basics — Learn Partial Differential Equations</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --accent:#3b82f6; --hl:#60a5fa;
+    --text:#e2e8f0; --muted:#94a3b8; --border:#1e293b; --good:#34d399; --warn:#fbbf24;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.65;padding:24px 16px;}
+  .wrap{max-width:860px;margin:0 auto;}
+  h1{font-size:2rem;font-weight:800;margin-bottom:4px;background:linear-gradient(90deg,var(--accent),var(--hl));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{color:var(--muted);margin-bottom:28px;font-size:.95rem;}
+  h2{font-size:1.3rem;margin-bottom:12px;color:var(--hl);}
+  h3{font-size:1.05rem;margin:16px 0 8px;color:var(--text);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:20px;}
+  .eq{background:#0a1120;border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:10px;padding:14px 18px;margin:12px 0;font-family:'Cambria Math','Times New Roman',serif;font-size:1.05rem;color:var(--hl);overflow-x:auto;}
+  .tag{display:inline-block;background:rgba(59,130,246,.15);color:var(--hl);border:1px solid rgba(59,130,246,.35);border-radius:999px;padding:2px 12px;font-size:.78rem;font-weight:600;margin-right:8px;margin-bottom:8px;}
+  .tag.green{background:rgba(52,211,153,.12);color:var(--good);border-color:rgba(52,211,153,.35);}
+  .tag.gold{background:rgba(251,191,36,.12);color:var(--warn);border-color:rgba(251,191,36,.35);}
+  ul,ol{padding-left:22px;margin:10px 0;}
+  li{margin-bottom:8px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px;}
+  .mini{background:#0d1526;border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .mini b{color:var(--hl);display:block;margin-bottom:6px;}
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+  .nav button{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:999px;padding:8px 16px;font-size:.85rem;cursor:pointer;transition:all .15s;}
+  .nav button:hover{border-color:var(--accent);}
+  .nav button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .sec{display:none;}
+  .sec.on{display:block;}
+  .note{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-radius:10px;padding:12px 16px;font-size:.9rem;color:#fde68a;margin-top:12px;}
+  .check{color:var(--good);font-weight:700;}
+  .x{color:#f87171;font-weight:700;}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Partial Differential Equations</h1>
+  <div class="sub">The beginner-friendly field guide 🧠 · Made for you by Nexus</div>
+
+  <div class="nav">
+    <button class="on" data-sec="s1">1 · What is a PDE?</button>
+    <button data-sec="s2">2 · The Big Three</button>
+    <button data-sec="s3">3 · Order &amp; Linearity</button>
+    <button data-sec="s4">4 · Conditions</button>
+    <button data-sec="s5">5 · How to Solve</button>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="sec on" id="s1">
+    <div class="card">
+      <h2>What is a PDE? 🤔</h2>
+      <p>A <b>Partial Differential Equation</b> is an equation that relates a function of <b>several variables</b> to its <b>partial derivatives</b>. It describes how things change in space <i>and</i> time at once.</p>
+      <div class="eq">u<sub>t</sub> = α u<sub>xx</sub></div>
+      <p>The function <b>u(x,t)</b> depends on position x and time t. Its derivatives tell us how it flows, spreads, vibrates or settles.</p>
+      <div class="note">💡 Why "partial"? Because we only differentiate with respect to <i>one</i> variable at a time, while treating the others as constant. If you only had one variable, it would be an ODE.</div>
+    </div>
+    <div class="card">
+      <h2>PDE vs ODE</h2>
+      <div class="grid">
+        <div class="mini"><b>ODE</b>Ordinary — one independent variable. Like tracking a ball: position only depends on time.<br><span class="eq" style="margin:8px 0 0;">y'' + y = 0</span></div>
+        <div class="mini"><b>PDE</b>Partial — two or more variables. Like tracking heat across a metal rod: depends on position <i>and</i> time.<br><span class="eq" style="margin:8px 0 0;">u<sub>t</sub> = u<sub>xx</sub></span></div>
+      </div>
+      <p style="margin-top:12px;">If the variables mix together — like x and t inside u — you have a PDE. That's the whole secret. 😄</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="sec" id="s2">
+    <div class="card">
+      <h2>The Big Three 🏆</h2>
+      <p>Three classic PDEs show up everywhere in physics. Learn these and you've learned 80% of the field.</p>
+      <h3>1 · The Heat Equation 🔥</h3>
+      <div class="eq">u<sub>t</sub> = α ∇²u</div>
+      <p>Describes how heat <b>spreads</b> over time. In 1D: u<sub>t</sub> = α u<sub>xx</sub>. The temperature smooths out — hot spots cool, cold spots warm. α is the thermal diffusivity (how fast heat travels).</p>
+      <h3>2 · The Wave Equation 🌊</h3>
+      <div class="eq">u<sub>tt</sub> = c² ∇²u</div>
+      <p>Describes how <b>vibrations travel</b> — guitar strings, drumheads (you'll like this one 🥁), light, sound. The disturbance moves at speed c without dying out.</p>
+      <h3>3 · Laplace's Equation ⚖️</h3>
+      <div class="eq">∇²u = 0</div>
+      <p>Describes <b>steady states</b> — the final, unchanging picture. Electrostatics, fluid flow, and heat distribution after everything settles. No time variable at all.</p>
+    </div>
+    <div class="card">
+      <h2>Quick Cheat-Sheet</h2>
+      <div class="grid">
+        <div class="mini"><b>Heat</b>One time derivative (u<sub>t</sub>)<br>Spreads &amp; smooths<br><span class="tag green">parabolic</span></div>
+        <div class="mini"><b>Wave</b>Two time derivatives (u<sub>tt</sub>)<br>Travels &amp; oscillates<br><span class="tag green">hyperbolic</span></div>
+        <div class="mini"><b>Laplace</b>No time at all<br>Steady &amp; balanced<br><span class="tag gold">elliptic</span></div>
+      </div>
+      <div class="note">🎵 Memory trick: <b>H</b>eat smooths, <b>W</b>ave wiggles, <b>L</b>aplace is lazy and stays still.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="sec" id="s3">
+    <div class="card">
+      <h2>Order &amp; Linearity 📏</h2>
+      <h3>Order = highest derivative</h3>
+      <ul>
+        <li><b>First order:</b> u<sub>t</sub> + c·u<sub>x</sub> = 0 <span class="tag">advection</span></li>
+        <li><b>Second order:</b> u<sub>tt</sub> = c²u<sub>xx</sub> <span class="tag">wave</span></li>
+        <li><b>Fourth order:</b> u<sub>t</sub> = −u<sub>xxxx</sub> <span class="tag">beam bending</span></li>
+      </ul>
+      <h3>Linearity = is u only to the first power?</h3>
+      <p>A PDE is <b>linear</b> if u and all its derivatives appear to the first power, multiplied only by constants (or functions of x,t).</p>
+      <ul>
+        <li><span class="check">✓ Linear:</span> u<sub>t</sub> = u<sub>xx</sub> — clean!</li>
+        <li><span class="x">✗ Nonlinear:</span> u<sub>t</sub> + u·u<sub>x</sub> = 0 (Burgers' eq — u multiplies u)</li>
+        <li><span class="x">✗ Nonlinear:</span> u<sub>t</sub> = u<sub>x</sub>² (derivative squared)</li>
+      </ul>
+      <div class="note">💡 Why care? <b>Linear</b> PDEs are friendly: solutions can be added together (superposition). <b>Nonlinear</b> PDEs are the wild chaos — shocks, turbulence, and 1&nbsp;million-dollar prize problems (Navier–Stokes 👀).</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="sec" id="s4">
+    <div class="card">
+      <h2>Boundary &amp; Initial Conditions 🚧</h2>
+      <p>A PDE alone has infinitely many solutions. You need extra info to pin down <b>the one</b> that matches your real problem.</p>
+      <h3>Initial Condition (IC) — the starting state</h3>
+      <div class="eq">u(x, 0) = f(x)</div>
+      <p>What the system looks like at time t=0. Like the string's shape the moment you pluck it. 🎸</p>
+      <h3>Boundary Conditions (BC) — the edges</h3>
+      <ul>
+        <li><b>Dirichlet:</b> fixed value at the boundary — u(0,t) = 0. Like a clamped string end.</li>
+        <li><b>Neumann:</b> fixed derivative at the boundary — u<sub>x</sub>(0,t) = 0. Like an insulated wall (no heat flows out).</li>
+        <li><b>Robin:</b> a mix — a·u + b·u<sub>x</sub> = g. Like a wall losing heat to the air.</li>
+      </ul>
+      <div class="note">🔑 Rule of thumb: you need as many conditions as the total order of the equation. 2nd order in space → 2 boundary conditions. 1st order in time → 1 initial condition.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="sec" id="s5">
+    <div class="card">
+      <h2>How Do We Solve Them? 🛠️</h2>
+      <h3>Step 1 · Separation of Variables (the classic)</h3>
+      <p>Assume the solution splits apart:</p>
+      <div class="eq">u(x,t) = X(x) · T(t)</div>
+      <p>Plug into the PDE → you get two separate ODEs, one for space, one for time. Solve each → combine → apply conditions. This is how you get Fourier series! 📈</p>
+      <h3>Step 2 · Other tools in the toolbox</h3>
+      <ul>
+        <li><b>Fourier transform</b> — convert derivatives into algebra. Great for infinite domains.</li>
+        <li><b>Green's functions</b> — solve for one point-source, then sum them all up.</li>
+        <li><b>Numerical methods</b> — when the math is too hard: finite differences, finite elements, spectral methods. This is what computers do! 💻</li>
+      </ul>
+      <h3>The 30-second recipe 🍳</h3>
+      <ol>
+        <li>Identify the type: heat / wave / Laplace?</li>
+        <li>Check order &amp; linearity.</li>
+        <li>Count your IC + BCs — do you have enough?</li>
+        <li>Try separation of variables → ODEs → solve → superposition.</li>
+        <li>Apply conditions to nail the constants.</li>
+        <li>If stuck: go numerical. Computers never judge. 😌</li>
+      </ol>
+    </div>
+  </div>
+
+  <footer>Made with 💙 by Nexus · Du schaffst das! 🥁</footer>
+</div>
+<script>
+  document.querySelectorAll('.nav button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
+      document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+      btn.classList.add('on');
+      document.getElementById(btn.dataset.sec).classList.add('on');
+    });
+  });
+</script>
+</body>
+</html>
